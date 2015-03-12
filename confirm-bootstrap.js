@@ -29,7 +29,10 @@
             confirmCancel    : 'Cancel',
             confirmDirection : 'rtl',
             confirmStyle     : 'primary',
-            confirmCallback  : defaultCallback
+            confirmCallback  : defaultCallback,
+
+            onShow           : function(){},
+            okBtnId          : 'ok-btn'
         };
         var options = $.extend(defaultOptions, opts);
 
@@ -63,13 +66,13 @@
             var modalTemplate = headModalTemplate;
             var buttonTemplate =
                 '<button class="btn btn-default" data-dismiss="modal">#Cancel#</button>' +
-                '<button class="btn btn-#Style#" data-dismiss="ok">#Ok#</button>'
+                '<button class="btn btn-#Style#" data-dismiss="ok" id="#okBtnId#">#Ok#</button>'
             ;
 
             if(options.confirmDirection == 'ltr')
             {
                 buttonTemplate =
-                    '<button class="btn btn-#Style#" data-dismiss="ok">#Ok#</button>' +
+                    '<button class="btn btn-#Style#" data-dismiss="ok" id="#okBtnId#">#Ok#</button>' +
                     '<button class="btn btn-default" data-dismiss="modal">#Cancel#</button>'
                 ;
             }
@@ -81,6 +84,7 @@
                 replace('#Heading#', options.confirmTitle).
                 replace('#Body#', options.confirmMessage).
                 replace('#Ok#', options.confirmOk).
+                replace('#okBtnId#', options.okBtnId).
                 replace('#Cancel#', options.confirmCancel).
                 replace('#Style#', options.confirmStyle)
             ;
@@ -93,6 +97,7 @@
             {
                 modalEvent.preventDefault();
                 confirmModal.modal('show');
+                options.onShow()
             });
 
             $('button[data-dismiss="ok"]', confirmModal).on('click', function(event) {
